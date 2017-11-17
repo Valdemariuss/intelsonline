@@ -1,0 +1,23 @@
+{
+  "name": "intelsonline",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "bower": "^1.8.2",
+    "connect": "^2.30.2",
+    "connect-livereload": "^0.6.0",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-jade": "^1.1.0",
+    "gulp-livereload": "^3.8.1",
+    "gulp-scss": "^1.4.0",
+    "tiny-lr": "^1.0.5"
+  }
+}
