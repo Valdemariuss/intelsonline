@@ -6,12 +6,35 @@
     <meta content="" name="description">
     <meta content="" name="keywords">
     <link href="style.css" rel="stylesheet">
+    <script src="bundle.js"></script>
   </head>
   <body>   
     <main class="main">
-      <h1>Результаты поиска 10</h1>
-      <div class="box">загрузка</div>
+      <h1>Результаты поиска</h1>
+      <div ng-app="searchApp" ng-controller="searchAppCtrl">       
+        <div>
+          <label for="searchType">Тип поиска: </label>
+          <select name="searchType" ng-model="searchType" ng-change="updateType()">
+            <option ng-repeat="type in this.searchTypes" value="{{type.id}}" selected="{{type.id === this.searchType ? true : false}}"> {{type.title}}</option>
+          </select>
+        </div>{{load}}
+        <div ng-if="items.length">
+          <table>
+            <tr>
+              <th>Тип поиска</th>
+              <th>Запрос</th>
+              <th>Дата</th>
+              <th>Найдено</th>
+            </tr>
+            <tr ng-repeat="item in items">
+              <td>{{getTypeTitle(item.search_type)}}</td>
+              <td>{{item.search_string}}</td>
+              <td>{{item.search_start}}</td>
+              <td>{{item.found}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
     </main>
-    <script src="bundle.js"></script>
   </body>
 </html>

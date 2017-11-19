@@ -16,15 +16,19 @@ gulp.task('jade', function() {
 });
 
 gulp.task('scss', function() {
-	gulp.src('src/static/scss/style.scss')
+	gulp.src(['src/bower_components/bootstrap/dist/css/bootstrap.css',
+	 'src/static/scss/style.scss'])
 	.pipe(scss())
 	.on('error', console.log)
+	.pipe(concat('style.css'))
 	.pipe(gulp.dest('build'))
 	.pipe(livereload());
 });
 
 gulp.task('js', function() {
-	gulp.src('./src/static/js/*.js')
+	gulp.src(['./src/bower_components/angular/angular.js',
+		'./src/bower_components/angular-resource/angular-resource.js',
+		'./src/static/js/*.js'])
 	.pipe(concat('bundle.js'))
 	.pipe(gulp.dest('./build'))
 	.pipe(livereload());
