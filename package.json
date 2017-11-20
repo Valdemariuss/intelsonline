@@ -1,14 +1,14 @@
 {
   "name": "intelsonline",
   "version": "1.0.0",
-  "description": "",
+  "description": "Test job",
   "main": "gulpfile.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Vladimir Sartakov",
+  "license": "MIT",
   "devDependencies": {
     "bower": "^1.8.2",
     "connect": "^2.30.2",
