@@ -6606,6 +6606,10 @@ BODY {
   text-align: center; }
 
 MAIN {
+  padding: 1rem;
   max-width: 900px;
   margin: auto;
   text-align: left; }
+
+.alert {
+  text-align: center; }

@@ -1,9 +1,11 @@
-var gulp = require('gulp'),
+"use strict";
+let gulp = require('gulp'),
 	livereload = require('gulp-livereload'),
 	connect = require('connect'),	
 	concat = require('gulp-concat'),
 	jade = require('gulp-jade'),
-	scss = require("gulp-scss");
+	scss = require("gulp-scss"),
+	jsImport = require('gulp-js-import');
 
 gulp.task('jade', function() {
 	gulp.src('./src/templates/*.jade')
@@ -26,9 +28,9 @@ gulp.task('scss', function() {
 });
 
 gulp.task('js', function() {
-	gulp.src(['./src/bower_components/angular/angular.js',
-		'./src/bower_components/angular-resource/angular-resource.js',
+	gulp.src(['./src/static/js/libs/libs.js',	
 		'./src/static/js/*.js'])
+	.pipe(jsImport({hideConsole: true}))
 	.pipe(concat('bundle.js'))
 	.pipe(gulp.dest('./build'))
 	.pipe(livereload());

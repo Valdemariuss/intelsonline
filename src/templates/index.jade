@@ -5,26 +5,27 @@ html(lang="ru")
     title Результаты поиска
     meta(content="", name="description")
     meta(content="", name="keywords")
+    meta(name="viewport", content="width=device-width, initial-scale=1, shrink-to-fit=no")
     link(href='style.css', rel="stylesheet")
     script(src='bundle.js')
-  body    
+  body
     main.main
-      h1 Результаты поиска
+      h2 Результаты поиска
       div(ng-app="searchApp" ng-controller="searchAppCtrl")        
-        div
+        div(class="form-group")
           label(for="searchType") Тип поиска: 
-          select(name="searchType", ng-model="searchType", ng-change="updateType()")
+          select(name="searchType", ng-model="searchType", ng-change="getItems()", class="form-control")
             option(ng-repeat="type in this.searchTypes", value="{{type.id}}", selected="{{type.id === this.searchType ? true : false}}")  {{type.title}}
-        {{load}}
-        div(ng-if="items.length")
-          table
-            tr
-              th Тип поиска
-              th Запрос
-              th Дата
-              th Найдено
-            tr(ng-repeat="item in items")
-              td {{getTypeTitle(item.search_type)}}
-              td {{item.search_string}}
-              td {{item.search_start}}
-              td {{item.found}}
+        div(ng-bind-html="message")
+        table(ng-if="items.length", class="table")
+          tr
+            th Тип поиска
+            th Запрос
+            th Дата
+            th Найдено
+          tr(ng-repeat="item in items")
+            td {{getTypeTitle(item.search_type)}}
+            td {{item.search_string}}
+            td {{formatDate(item.search_start)}}
+            td {{item.found}}
+        button(ng-if="httpError", ng-click="getItems()", class="btn btn-primary") Повторить

@@ -5,35 +5,36 @@
     <title>Результаты поиска</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="style.css" rel="stylesheet">
     <script src="bundle.js"></script>
   </head>
-  <body>   
+  <body>
     <main class="main">
-      <h1>Результаты поиска</h1>
+      <h2>Результаты поиска</h2>
       <div ng-app="searchApp" ng-controller="searchAppCtrl">       
-        <div>
+        <div class="form-group">
           <label for="searchType">Тип поиска: </label>
-          <select name="searchType" ng-model="searchType" ng-change="updateType()">
+          <select name="searchType" ng-model="searchType" ng-change="getItems()" class="form-control">
             <option ng-repeat="type in this.searchTypes" value="{{type.id}}" selected="{{type.id === this.searchType ? true : false}}"> {{type.title}}</option>
           </select>
-        </div>{{load}}
-        <div ng-if="items.length">
-          <table>
-            <tr>
-              <th>Тип поиска</th>
-              <th>Запрос</th>
-              <th>Дата</th>
-              <th>Найдено</th>
-            </tr>
-            <tr ng-repeat="item in items">
-              <td>{{getTypeTitle(item.search_type)}}</td>
-              <td>{{item.search_string}}</td>
-              <td>{{item.search_start}}</td>
-              <td>{{item.found}}</td>
-            </tr>
-          </table>
         </div>
+        <div ng-bind-html="message"></div>
+        <table ng-if="items.length" class="table">
+          <tr>
+            <th>Тип поиска</th>
+            <th>Запрос</th>
+            <th>Дата</th>
+            <th>Найдено</th>
+          </tr>
+          <tr ng-repeat="item in items">
+            <td>{{getTypeTitle(item.search_type)}}</td>
+            <td>{{item.search_string}}</td>
+            <td>{{formatDate(item.search_start)}}</td>
+            <td>{{item.found}}</td>
+          </tr>
+        </table>
+        <button ng-if="httpError" ng-click="getItems()" class="btn btn-primary">Повторить</button>
       </div>
     </main>
   </body>

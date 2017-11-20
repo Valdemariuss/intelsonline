@@ -1,53 +1,63 @@
 (function (A) {
-    "use strict";
-    var app = A.module('searchApp', ['ngResource']);
+	"use strict";
+	let app = A.module('searchApp', ['ngResource', 'ngSanitize', 'LocalStorageModule']);
 
-	app.controller("searchAppCtrl", function($scope, $resource){
-		$scope.load = "Загрузка";
-		$scope.url = "http://dev2.poiskznakov.ru/api-rest/test-me/";
-		$scope.params = {};
-		$scope.searchType = "";
-		$scope.searchTypes = [{
-				id : "",
-				title : "Все"
-			}, {
-				id : "wdesc",
-				title : "По словесному элементу"			
-			}, {
-				id : "owner",
-				title : "По владельцу"
-			}, {
-				id : "document_number",
-				title : "По номеру документа"
-			}];
-		$scope.updateItems = function() {
-			console.warn($scope.items);
-			if($scope.items.length){
-				$scope.load = "";
-			} else {
-				$scope.load = "Ничего не найдено";	
-			}
+	app.controller("searchAppCtrl", function ($scope, $resource, localStorageService) {
+		const url = "http://dev2.poiskznakov.ru/api-rest/test-me/";
+		let resource = $resource(url),
+			store = localStorageService,
+			messages = {
+				load : "<div class='alert alert-info'>Загрузка...</div>",
+				noFound : "<div class='alert alert-warning'>Ничего не найдено</div>",
+				noServer : "<div class='alert alert-danger'>Сервер временно недоступен</div>"
+			};
+
+		A.extend($scope, {
+			message : "",
+			searchType : store.get("searchType") || "",
+			searchTypes : [{ id : "", title : "Все"},
+				{id : "wdesc", title : "По словесному элементу"}, 
+				{id : "owner", title : "По владельцу"},
+				{id : "document_number", title : "По номеру документа"}],
+			httpError : false	
+		});
+
+		function _params() {
+			return $scope.searchType ? {stype: $scope.searchType} : {};	
 		};
-		$scope.getItems = function(){
-			$scope.load = "Загрузка";
+
+		function _updateItems() {
+			$scope.message = ($scope.items && $scope.items.length) ? "" : messages.noFound;
+		};
+
+		function _onError(error) {
+			$scope.httpError = true;
+			$scope.message = messages.noServer;
+		};
+
+		function _cleanErrors() {
+			$scope.message = messages.load;
 			$scope.noFound = "";
-			$scope.items = $resource($scope.url).query($scope.params, $scope.updateItems); 
+			$scope.httpError = false;
 		};
-		$scope.updateType = function() {
-			console.warn($scope.searchType);
-			$scope.params = $scope.searchType ? {stype: $scope.searchType} : {};
-			$scope.getItems();
+
+		$scope.getItems = function(){
+			_cleanErrors();
+			$scope.items = resource.query(_params(), _updateItems, _onError);
+			store.set("searchType", $scope.searchType);
 		};
 
 		$scope.getTypeTitle = function(id) {
-			var title = "";
+			let title = "";
 			A.forEach($scope.searchTypes, function(value, key) {
-				if(value && value.id === id){
-					title = value.title;
-					return;
-				}
+				if (value && value.id === id) { title = value.title; return; }
 			});
 			return title;
+		};
+
+		$scope.formatDate = function(date) {
+			let newDate = A.isString(date) ? date.split(".").reverse().join("-") : "";			
+			return newDate;
 		};
 
 		$scope.getItems();   	
